@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 from bs4 import BeautifulSoup
 from random import randint
 from datetime import date,timedelta
@@ -17,6 +18,18 @@ bundurl = "http://scores.nbcsports.com/bund/scoreboard_daily.asp"
 # color range - 30,38
 def color(this_color, string):
     return "\033[" + this_color + "m" + string + "\033[0m"
+
+# I copied it from https://github.com/addyosmani/psi/blob/master/lib%2Futils.js#L36-L50
+def buffer(msg, length):
+        ret = ""
+
+	length = length - len(msg) - 1
+
+	if length > 0:
+            ret = " " * length
+        
+
+	return ret
 
 """ getTerminalSize()
  - get width and height of console
@@ -130,14 +143,15 @@ def scrap_web (web_url,leauge):
                 if 'HomeTeam' in data:
  #                   has_fixture = True
                     print color(str(randint(31,38)),table.span.get('title'))+" ",
-
+                    print buffer(table.span.get('title'),24),
+                    
                 if 'Score' in data and 'Half' not in data and table.get('style') == None and table.get("colspan") == None: 
-  #                      has_fixture = True
-                        print table.get_text()+" ",
-                
+  #                      has_fixture = True 
+                    print table.get_text()+" ",
 
                 if 'AwayTeam' in data:
    #                 has_fixture = True
+                    print buffer(table.span.get('title'),24),
                     print color(str(randint(31,38)),table.span.get('title')) +"\n"
 
     # if has_fixture is False:
